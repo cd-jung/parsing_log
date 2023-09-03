@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Log Analyser</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script type="text/javascript">
+        var analysis = {{ analysis|safe }};
+
+        google.charts.load('current', {'packages':['timeline']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            var container = document.getElementById('timeline');
+            var chart = new google.visualization.Timeline(container);
+            var dataTable = new google.visualization.DataTable();
+
+            dataTable.addColumn({ type: 'string', id: 'Event' });
+            dataTable.addColumn({ type: 'date', id: 'Start' });
+            dataTable.addColumn({ type: 'date', id: 'End' });
+
+            dataTable.addRows([
+                ['Event 1', new Date(2023, 8, 1), new Date(2023, 8, 5)],
+                ['Event 1', new Date(2023, 8, 7), new Date(2023, 8, 7)],
+                ['Event 2', new Date(2023, 8, 6), new Date(2023, 8, 9)],
+                ['Event 3', new Date(2023, 8, 12), new Date(2023, 8, 16)],
+            ]);
+
+            var options = {
+                height: 300 
+            };
+
+            chart.draw(dataTable, options);
+        }
+
+        window.addEventListener('resize', function () {
+            console.log("resizing")
+            google.charts.load('current', {'packages':['timeline']});
+            google.charts.setOnLoadCallback(drawChart);
+        });
+    </script>
+</head>
+<body>
+    <div class="container mt-5 col 8">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <p> Sum of device on time : {{ sum }} ms</p>
+                <div id="timeline"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
