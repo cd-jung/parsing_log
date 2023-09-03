@@ -28,7 +28,7 @@ class DeviceStateAnalyser(AbstractedDataAnalyser):
         """ Parsing and store a line data. """
         time = self._extract_time(line).timestamp()
         state = self._extract_state(line)
-        print(f"time:{time}, state:{state}")
+        # print(f"time:{time}, state:{state}")
 
         if state == DeviceState.ERR:
             self.device_error_records.append(time)
@@ -45,9 +45,9 @@ class DeviceStateAnalyser(AbstractedDataAnalyser):
             if 'duration' in record:
                 self.total_of_on_time += record['duration']
         
-        print('total_of_on_time :', str(self.total_of_on_time))
-        print('device_onoff_records :', str(self.device_onoff_records))
-        print('device_error_records :', str(self.device_error_records))
+        # print('total_of_on_time :', str(self.total_of_on_time))
+        # print('device_onoff_records :', str(self.device_onoff_records))
+        # print('device_error_records :', str(self.device_error_records))
 
     def store(self) -> str:
         """ Storing a result as a file and return the result file.
