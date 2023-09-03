@@ -1,5 +1,5 @@
 
-from apps.analyser.analysis.abstract_data_analyser import AbstractedDataAnalyser
+from abstract_data_analyser import AbstractedDataAnalyser
 
 class DeviceStateAnalyser(AbstractedDataAnalyser):
 
