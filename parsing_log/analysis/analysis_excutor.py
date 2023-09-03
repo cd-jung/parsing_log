@@ -1,4 +1,4 @@
-from abstract_data_analyser import AbstractedDataAnalyser
+from .abstract_data_analyser import AbstractedDataAnalyser
 
 def excute_analysis(file_path: str, analyser: AbstractedDataAnalyser) -> str:
     # read a file and its lines 
