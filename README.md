@@ -1,7 +1,7 @@
 # parsing_log
 
 ## This project is..
-- developed on WSL(Ubuntu 20.04)
+- developed on WSL(Ubuntu 20.04.4 LTS)
 - developed on Python 3.8.10
 - developed on Django 4.2.4
 - developed on VS Code 1.81.1
