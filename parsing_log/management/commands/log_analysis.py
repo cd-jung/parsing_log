@@ -1,6 +1,7 @@
 import os
 from django.core.management.base import BaseCommand
 from parsing_log.analysis.analysis_excutor import excute_analysis
+from parsing_log.analysis.device_state_analyser import DeviceStateAnalyser
 
 class Command(BaseCommand):
     """ Command for analysing a given log file """
@@ -17,8 +18,10 @@ class Command(BaseCommand):
         self.stdout.write(self.style.NOTICE(f"Starts to analyse a log file '{file_path}'."))
 
         try:
-            excute_analysis(file_path)
+            res_file = excute_analysis(file_path, DeviceStateAnalyser())
         except Exception as exc:
             self.stdout.write(self.style.ERROR(f"An eception occured while analysing data."))
             self.stdout.write(self.style.ERROR(exc))
             raise Exception(exc)
+        
+        self.stdout.write(self.style.SUCCESS(f"Analysing is completed. result:'{res_file}'."))
