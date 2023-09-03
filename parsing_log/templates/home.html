@@ -14,6 +14,15 @@
         google.charts.load('current', {'packages':['timeline']});
         google.charts.setOnLoadCallback(drawChart);
 
+        function make_ontime_row(startTime, endTime){
+            startTime = new Date(startTime);
+            endTime = new Date(endTime);
+
+            return ["OnTime", startTime, endTime]
+        }
+        function make_error_row(time){
+            return ["Errors", new Date(time), new Date(time)]
+        }
         function drawChart() {
             var container = document.getElementById('timeline');
             var chart = new google.visualization.Timeline(container);
@@ -23,15 +32,25 @@
             dataTable.addColumn({ type: 'date', id: 'Start' });
             dataTable.addColumn({ type: 'date', id: 'End' });
 
-            dataTable.addRows([
-                ['Event 1', new Date(2023, 8, 1), new Date(2023, 8, 5)],
-                ['Event 1', new Date(2023, 8, 7), new Date(2023, 8, 7)],
-                ['Event 2', new Date(2023, 8, 6), new Date(2023, 8, 9)],
-                ['Event 3', new Date(2023, 8, 12), new Date(2023, 8, 16)],
-            ]);
+            let rows = [];
+            const onoff_records = analysis.device_onoff_records;
+            for(let i in onoff_records){
+                rows.push(make_ontime_row(onoff_records[i].start_time, onoff_records[i].end_time));
+            }
+            const error_records = analysis.device_error_records;
+            for(let i in error_records){
+                rows.push(make_error_row(error_records[i]));
+            }
+
+            dataTable.addRows(rows);
 
             var options = {
-                height: 300 
+                height: 300,
+                hAxis: { title: '', textPosition: 'none', viewWindow: {
+                        min: new Date(+analysis.start_time),
+                        max: new Date(+analysis.end_time)
+                    } 
+                }
             };
 
             chart.draw(dataTable, options);
@@ -48,10 +67,30 @@
     <div class="container mt-5 col 8">
         <div class="row">
             <div class="col-md-8 mx-auto">
-                <p> Sum of device on time : {{ sum }} ms</p>
+                <p id="total"> </p>
+            </div>
+            <div class="col-md-8 mx-auto">
+                <p id="total"> </p>
                 <div id="timeline"></div>
             </div>
         </div>
+        <div class="row">
+            <table class="table col-md-8 mx-auto">
+                <thead class="thead-dark">
+                  <tr>
+                    <th scope="col">Error Times</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for record in errors %}
+                        <tr><td>{{ record }}</td></tr>
+                    {% endfor %}
+                </tbody>
+              </table>
+        </div>
     </div>
+    <script type="text/javascript">
+        document.getElementById('total').textContent = "Total of device on time: " + analysis.total_of_on_time/60/1000 + " minutes";
+    </script>
 </body>
 </html>
